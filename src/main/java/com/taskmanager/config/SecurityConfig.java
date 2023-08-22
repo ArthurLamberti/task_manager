@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,7 +40,7 @@ public class SecurityConfig {
 
         return http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -60,9 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(mvcMatcher("/auth")).authenticated()
                         .requestMatchers(mvcMatcher("/public"), mvcMatcher("/users")).permitAll()
-                        .requestMatchers(mvcMatcher("/admin")).hasRole("ADMIN")
-                        .requestMatchers(mvcMatcher("/manager")).hasRole("MANAGER")
-                        .requestMatchers(mvcMatcher("/both")).hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(mvcMatcher("/tasks")).hasRole("USER")
                 )
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "users")
@@ -25,6 +26,10 @@ public class User {
     @OneToMany(mappedBy="user",fetch=FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<Role> roles;
+
+    @OneToMany(mappedBy="user",fetch=FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Task> tasks;
 
     private String name;
     private String email;

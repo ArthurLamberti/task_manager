@@ -2,6 +2,7 @@ package com.taskmanager.controllers;
 
 import com.taskmanager.model.User;
 import com.taskmanager.repositories.UserRepository;
+import com.taskmanager.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,20 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     UserController(
-            final UserRepository userRepository
+            final UserService userService
     ){
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @RequestMapping("/auth")
     public User authAndDetailUser(Authentication authentication) {
-        return userRepository
-                .findByUsername(authentication.getName())
-                .or(() -> userRepository.findByEmail(authentication.getName()))
-                .orElseThrow(() -> new RuntimeException("User not found!"));
+        return userService.authUser(authentication);
     }
 
 }

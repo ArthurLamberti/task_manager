@@ -1,6 +1,7 @@
 package com.taskmanager.repositories;
 
 import com.taskmanager.model.Role;
+import com.taskmanager.model.Task;
 import com.taskmanager.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    Set<Role> findByUser(User user);
+public interface TaskRepository extends JpaRepository<Task, Long> {
 }
