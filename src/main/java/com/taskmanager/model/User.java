@@ -2,10 +2,7 @@ package com.taskmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
@@ -15,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Builder
+@ToString
 public class User {
 
     @Id
@@ -37,4 +35,15 @@ public class User {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: ").append(this.id).append(";");
+        sb.append("name: ").append(this.name).append(";");
+        sb.append("email: ").append(this.email).append(";");
+        sb.append("username: ").append(this.username).append(";");
+        return sb.toString();
+    }
 }

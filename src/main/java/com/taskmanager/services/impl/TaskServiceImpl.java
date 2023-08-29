@@ -39,6 +39,7 @@ public class TaskServiceImpl implements TaskService {
                 .name(createTaskDTO.getName())
                 .user(user)
                 .status(TaskStatusEnum.TODO)
+                .active(true)
                 .build();
         taskRepository.save(task);
     }
@@ -50,7 +51,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> list() {
-        return taskRepository.findAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUserByAuthentication(auth);
+        return taskRepository.findByUserId(user.getId());
     }
 
     @Override

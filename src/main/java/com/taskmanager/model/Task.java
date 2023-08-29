@@ -2,10 +2,7 @@ package com.taskmanager.model;
 
 import com.taskmanager.enums.TaskStatusEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -42,4 +39,17 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private boolean active;
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: ").append(this.id).append(";");
+        sb.append("name: ").append(this.name).append(";");
+        sb.append("status: ").append(this.status).append(";");
+        sb.append("active: ").append(this.active).append(";");
+        sb.append("user: ").append(this.user).append(";");
+        return sb.toString();
+    }
 }

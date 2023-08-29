@@ -31,4 +31,12 @@ public class UserServiceImpl implements UserService {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
     }
+
+    @Override
+    public User getUserByAuthentication(Authentication authentication) {
+        return userRepository
+                .findByUsername(authentication.getName())
+                .or(()->userRepository.findByEmail(authentication.getName()))
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+    }
 }

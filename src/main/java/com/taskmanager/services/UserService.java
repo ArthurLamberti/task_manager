@@ -6,4 +6,5 @@ import org.springframework.security.core.Authentication;
 public interface UserService {
     User authUser(Authentication authentication);
     User getUserById(Long id);
+    User getUserByAuthentication(Authentication authentication);
 }
