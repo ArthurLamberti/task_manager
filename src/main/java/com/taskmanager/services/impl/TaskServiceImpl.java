@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void create(CreateTaskDTO createTaskDTO) {
-        User user = userService.getUserById(createTaskDTO.getUserId());
+        User user = userService.getUserByAuthentication(SecurityContextHolder.getContext().getAuthentication());
         Task task = Task.builder()
                 .createdAt(LocalDateTime.now())
                 .name(createTaskDTO.getName())
@@ -45,7 +45,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void delete() {
+    public void delete(Long taskId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(()->new RuntimeException("task not found!"));
+        task.setActive(false);
+        taskRepository.save(task);
         log.info("delete");
     }
 

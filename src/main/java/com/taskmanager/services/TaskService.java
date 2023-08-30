@@ -8,7 +8,7 @@ import java.util.List;
 public interface TaskService {
 
     void create(CreateTaskDTO createTaskDTO);
-    void delete();
+    void delete(Long taskId);
     List<Task> list();
     void update();
 

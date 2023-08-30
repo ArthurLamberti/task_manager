@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(mvcMatcher("/auth")).authenticated()
                         .requestMatchers(mvcMatcher("/public"), mvcMatcher("/users")).permitAll()
-                        .requestMatchers(mvcMatcher("/tasks")).hasRole("USER")
+                        .requestMatchers(mvcMatcher("/tasks/**")).hasRole("USER")
                 )
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())

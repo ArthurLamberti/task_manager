@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @Data
 public class CreateTaskDTO {
     private String name;
-    private Long userId;
 }
