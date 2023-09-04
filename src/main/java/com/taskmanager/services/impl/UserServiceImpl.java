@@ -4,6 +4,7 @@ import com.taskmanager.model.User;
 import com.taskmanager.repositories.UserRepository;
 import com.taskmanager.services.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,17 +27,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository
-                .findById(id)
+                .findByUsername(authentication.getName())
+                .or(() -> userRepository.findByEmail(authentication.getName()))
                 .orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
-    @Override
-    public User getUserByAuthentication(Authentication authentication) {
-        return userRepository
-                .findByUsername(authentication.getName())
-                .or(()->userRepository.findByEmail(authentication.getName()))
-                .orElseThrow(() -> new RuntimeException("User not found!"));
-    }
 }

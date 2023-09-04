@@ -1,6 +1,7 @@
 package com.taskmanager.controllers;
 
 import com.taskmanager.dto.CreateTaskDTO;
+import com.taskmanager.dto.UpdateTaskDTO;
 import com.taskmanager.model.Task;
 import com.taskmanager.services.TaskService;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class TaskController {
 
 
     @GetMapping("/tasks")
-    public List<Task> listByUser() {
-        return this.taskService.list();
+    public List<Task> listByUser(@RequestParam(required = false) boolean all) {
+        return this.taskService.list(all);
     }
 
     @PostMapping("/tasks")
@@ -29,9 +30,9 @@ public class TaskController {
         this.taskService.create(createTaskDTO);
     }
 
-    @PutMapping("/tasks")
-    public void update() {
-        this.taskService.update();
+    @PutMapping("/tasks/{id}")
+    public void update(@PathVariable("id") long id,@RequestBody UpdateTaskDTO updateTaskDTO) {
+        this.taskService.update(id, updateTaskDTO);
     }
 
     @DeleteMapping("/tasks/{id}")
