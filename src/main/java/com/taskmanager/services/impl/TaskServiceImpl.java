@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -71,10 +70,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void delete(final Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("task not found!"));
+        User user = userService.getAuthenticatedUser();
+        Task task = taskRepository.findByIdAndUserId(taskId, user.getId()).orElseThrow(() -> new RuntimeException("task not found!"));
         task.setActive(false);
         taskRepository.save(task);
-        log.info("delete");
     }
 
     @Override
