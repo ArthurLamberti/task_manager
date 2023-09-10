@@ -3,6 +3,7 @@ package com.taskmanager.services.impl;
 import com.taskmanager.dto.CreateTaskDTO;
 import com.taskmanager.dto.UpdateTaskDTO;
 import com.taskmanager.enums.TaskStatusEnum;
+import com.taskmanager.exceptions.ValidationException;
 import com.taskmanager.model.Task;
 import com.taskmanager.model.User;
 import com.taskmanager.repositories.TaskRepository;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 @Slf4j
@@ -34,12 +38,33 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void create(final CreateTaskDTO createTaskDTO) {
         User user = userService.getAuthenticatedUser();
+
+        if (nonNull(createTaskDTO.getStartDate())) {
+            if (nonNull(createTaskDTO.getEndDate()) && createTaskDTO.getEndDate().isBefore(createTaskDTO.getStartDate())) {
+                throw new ValidationException("EndDate must be after startDate!");
+            }
+
+            if (nonNull(createTaskDTO.getEstimatedDate()) && createTaskDTO.getEstimatedDate().isBefore(createTaskDTO.getStartDate())) {
+                throw new ValidationException("Estimated must be after startDate!");
+            }
+        }
+
+        if (
+                (nonNull(createTaskDTO.getEndDate())
+                        || nonNull(createTaskDTO.getEstimatedDate())
+                ) && isNull(createTaskDTO.getStartDate())) {
+            throw new ValidationException("StartDate cannot be null!");
+        }
+
         Task task = Task.builder()
                 .createdAt(LocalDateTime.now())
                 .name(createTaskDTO.getName())
                 .user(user)
                 .status(TaskStatusEnum.TODO)
                 .active(true)
+                .startDate(createTaskDTO.getStartDate())
+                .endDate(createTaskDTO.getEndDate())
+                .estimatedDate(createTaskDTO.getEstimatedDate())
                 .build();
         taskRepository.save(task);
     }
@@ -65,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
     public void update(long id, UpdateTaskDTO updateTaskDTO) {
         User user = userService.getAuthenticatedUser();
         Task task = taskRepository.findByIdAndUserId(id, user.getId())
-                        .orElseThrow(()->new RuntimeException("Task not found"));
+                .orElseThrow(() -> new RuntimeException("Task not found"));
 
         task.setName(updateTaskDTO.getName());
         task.setStatus(updateTaskDTO.getStatus());

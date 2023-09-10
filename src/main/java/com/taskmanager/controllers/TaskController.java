@@ -4,6 +4,7 @@ import com.taskmanager.dto.CreateTaskDTO;
 import com.taskmanager.dto.UpdateTaskDTO;
 import com.taskmanager.model.Task;
 import com.taskmanager.services.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public void create(@RequestBody CreateTaskDTO createTaskDTO) {
+    public void create(@RequestBody @Valid CreateTaskDTO createTaskDTO) {
         this.taskService.create(createTaskDTO);
     }
 

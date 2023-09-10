@@ -3,6 +3,7 @@ package com.taskmanager.model;
 import com.taskmanager.enums.TaskStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -29,20 +30,32 @@ public class Task {
     @Column(name = "task_id")
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
+
+    @Column(name = "estimated_date")
+    private LocalDateTime estimatedDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
+    @Column(name = "status", nullable = false)
     private TaskStatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false, updatable = false)
     private User user;
 
+    @Column(name = "active", nullable = false, updatable = false)
     private boolean active;
 
     @Override
