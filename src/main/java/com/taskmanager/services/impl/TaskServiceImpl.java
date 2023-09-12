@@ -93,9 +93,13 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        task.setName(updateTaskDTO.getName());
-        task.setStatus(updateTaskDTO.getStatus());
-        task.setActive(updateTaskDTO.isActive());
+        if (nonNull(updateTaskDTO.getName()))
+            task.setName(updateTaskDTO.getName());
+        if (nonNull(updateTaskDTO.getStatus()))
+            task.setStatus(updateTaskDTO.getStatus());
+        if (nonNull(updateTaskDTO.getActive()))
+            task.setActive(updateTaskDTO.getActive());
+
         task.setUpdatedAt(updateTaskDTO.getUpdatedAt());
         taskRepository.save(task);
     }

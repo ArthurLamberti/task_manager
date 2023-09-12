@@ -18,7 +18,7 @@ public class UpdateTaskDTO {
     private String name;
     private TaskStatusEnum status;
     private LocalDateTime updatedAt = LocalDateTime.now();
-    private boolean active;
+    private Boolean active;
 
 
 }
