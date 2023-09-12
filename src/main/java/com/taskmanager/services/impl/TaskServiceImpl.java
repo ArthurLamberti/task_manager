@@ -1,5 +1,6 @@
 package com.taskmanager.services.impl;
 
+import com.taskmanager.constraints.ExceptionStrings;
 import com.taskmanager.dto.CreateTaskDTO;
 import com.taskmanager.dto.UpdateTaskDTO;
 import com.taskmanager.enums.TaskStatusEnum;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.taskmanager.constraints.ExceptionStrings.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -40,11 +42,11 @@ public class TaskServiceImpl implements TaskService {
 
         if (nonNull(createTaskDTO.getStartDate())) {
             if (nonNull(createTaskDTO.getEndDate()) && createTaskDTO.getEndDate().isBefore(createTaskDTO.getStartDate())) {
-                throw new ValidationException("EndDate must be after startDate!");
+                throw new ValidationException(ENDDATE_BEFORE_STARTDATE);
             }
 
             if (nonNull(createTaskDTO.getEstimatedDate()) && createTaskDTO.getEstimatedDate().isBefore(createTaskDTO.getStartDate())) {
-                throw new ValidationException("Estimated must be after startDate!");
+                throw new ValidationException(ESTIMATEDDATE_BEFORE_STARTDATE);
             }
         }
 
@@ -52,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
                 (nonNull(createTaskDTO.getEndDate())
                         || nonNull(createTaskDTO.getEstimatedDate())
                 ) && isNull(createTaskDTO.getStartDate())) {
-            throw new ValidationException("StartDate cannot be null!");
+            throw new ValidationException(STARTDATE_NULL);
         }
 
         Task task = Task.builder()
